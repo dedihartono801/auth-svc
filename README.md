@@ -15,6 +15,8 @@
 - https://github.com/dedihartono801/protobuf - Proto file
 - https://github.com/dedihartono801/ssl - For generate your ssl each service
 
+## Create database auth_svc,product_svc,order_svc
+
 ## Installation
 
 ```bash

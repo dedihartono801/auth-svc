@@ -11,6 +11,7 @@ import (
 	"github.com/dedihartono801/auth-svc/pkg/utils"
 	pb "github.com/dedihartono801/protobuf/auth/v1"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 )
 
 func main() {
@@ -41,7 +42,23 @@ func main() {
 		Jwt: jwt,
 	}
 
-	grpcServer := grpc.NewServer()
+	opts := []grpc.ServerOption{}
+	tls := true
+
+	if tls {
+		certFile := "ssl/auth-svc/server.crt"
+		kefFile := "ssl/auth-svc/server.pem"
+
+		creds, err := credentials.NewServerTLSFromFile(certFile, kefFile)
+
+		if err != nil {
+			log.Fatalf("Failed loading certificates: %v\n", err)
+		}
+
+		opts = append(opts, grpc.Creds(creds))
+	}
+
+	grpcServer := grpc.NewServer(opts...)
 
 	pb.RegisterAuthServiceServer(grpcServer, &s)
 
